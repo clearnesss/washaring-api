@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Entity\Collection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ReservationRepository")
@@ -10,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Reservation
 {
     /**
+     * @var int
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -17,41 +20,83 @@ class Reservation
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @var User
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="reservations")
      */
-    private $customer_id;
+    private $customer;
 
     /**
+     * @var string
      * @ORM\Column(type="datetime")
      */
-    private $created_at;
+    private $createdAt;
 
-    public function getId(): ?int
+    /**
+     * @var Collection|UsersServices[]
+     * @ORM\ManyToMany(targetEntity="App\Entity\UsersServices", inversedBy="reservations")
+     * @ORM\JoinTable(name="reservations_users_services")
+     */
+    private $usersServices;
+
+    public function __construct()
+    {
+        $this->usersServices = new ArrayCollection();
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getCustomerId(): ?int
+    public function setId(int $id): self
     {
-        return $this->customer_id;
-    }
-
-    public function setCustomerId(int $customer_id): self
-    {
-        $this->customer_id = $customer_id;
-
+        $this->id = $id;
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    /**
+     * @return User
+     */
+    public function getCustomer(): User
     {
-        return $this->created_at;
+        return $this->customer;
     }
 
-    public function setCreatedAt(\DateTimeInterface $created_at): self
+    public function setCustomer(User $customer): self
     {
-        $this->created_at = $created_at;
-
+        $this->customer = $customer;
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getCreatedAt(): string
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(string $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUsersServices()
+    {
+        return $this->usersServices;
+    }
+
+    public function setUsersServices($usersServices): self
+    {
+        $this->usersServices = $usersServices;
+        return $this;
+    }
+
 }

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Entity\Collection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UsersServicesRepository")
@@ -10,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class UsersServices
 {
     /**
+     * @var int
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -17,75 +19,119 @@ class UsersServices
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @var User
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="usersServices")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    private $user_id;
+    private $user;
 
     /**
-     * @ORM\Column(type="integer")
+     * @var Service
+     * @ORM\ManyToOne(targetEntity="App\Entity\Service", inversedBy="usersServices")
+     * @ORM\JoinColumn(name="service_id", referencedColumnName="id")
      */
-    private $service_id;
+    private $service;
 
     /**
+     * @var float
      * @ORM\Column(type="decimal", precision=10, scale=2)
      */
     private $price;
 
     /**
+     * @var string
      * @ORM\Column(type="text", nullable=true)
      */
-    private $further_information;
+    private $furtherInformation;
 
-    public function getId(): ?int
+    /**
+     * @var Collection|Reservation[]
+     * @ORM\ManyToMany(targetEntity="App\Entity\Reservation", mappedBy="usersServices")
+     */
+    private $reservations;
+
+    /**
+     * @return int
+     */
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getUserId(): ?int
+    public function setId(int $id): self
     {
-        return $this->user_id;
-    }
-
-    public function setUserId(int $user_id): self
-    {
-        $this->user_id = $user_id;
-
+        $this->id = $id;
         return $this;
     }
 
-    public function getServiceId(): ?int
+    /**
+     * @return User
+     */
+    public function getUser(): User
     {
-        return $this->service_id;
+        return $this->user;
     }
 
-    public function setServiceId(int $service_id): self
+    public function setUser(User $user): self
     {
-        $this->service_id = $service_id;
-
+        $this->user = $user;
         return $this;
     }
 
-    public function getPrice()
+    /**
+     * @return Service
+     */
+    public function getService(): Service
+    {
+        return $this->service;
+    }
+
+    public function setService(Service $service): self
+    {
+        $this->service = $service;
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPrice(): float
     {
         return $this->price;
     }
 
-    public function setPrice($price): self
+    public function setPrice(float $price): self
     {
         $this->price = $price;
-
         return $this;
     }
 
-    public function getFurtherInformation(): ?string
+    /**
+     * @return string
+     */
+    public function getFurtherInformation(): string
     {
-        return $this->further_information;
+        return $this->furtherInformation;
     }
 
-    public function setFurtherInformation(?string $further_information): self
+    public function setFurtherInformation(string $furtherInformation): self
     {
-        $this->further_information = $further_information;
-
+        $this->furtherInformation = $furtherInformation;
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getReservations()
+    {
+        return $this->reservations;
+    }
+
+    public function setReservations($reservations): self
+    {
+        $this->reservations = $reservations;
+        return $this;
+    }
+
 }

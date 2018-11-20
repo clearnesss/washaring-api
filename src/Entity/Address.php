@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Address
 {
     /**
+     * @var int
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -17,41 +18,59 @@ class Address
     private $id;
 
     /**
+     * @var string
      * @ORM\Column(type="text")
      */
     private $street;
 
     /**
+     * @var string
      * @ORM\Column(type="string", length=255)
      */
     private $city;
 
     /**
+     * @var string
      * @ORM\Column(type="string", length=5)
      */
-    private $zip_code;
+    private $zipCode;
 
     /**
+     * @var string
      * @ORM\Column(type="string", length=50)
      */
     private $country;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $user_id;
-
-    /**
+     * @var bool
      * @ORM\Column(type="boolean")
      */
-    private $is_default;
+    private $isDefault;
 
-    public function getId(): ?int
+    /**
+     * @var User
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="addresses")
+     */
+    private $user;
+
+    /**
+     * @return int
+     */
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getStreet(): ?string
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStreet(): string
     {
         return $this->street;
     }
@@ -59,11 +78,13 @@ class Address
     public function setStreet(string $street): self
     {
         $this->street = $street;
-
         return $this;
     }
 
-    public function getCity(): ?string
+    /**
+     * @return string
+     */
+    public function getCity(): string
     {
         return $this->city;
     }
@@ -71,23 +92,27 @@ class Address
     public function setCity(string $city): self
     {
         $this->city = $city;
-
         return $this;
     }
 
-    public function getZipCode(): ?string
+    /**
+     * @return string
+     */
+    public function getZipCode(): string
     {
-        return $this->zip_code;
+        return $this->zipCode;
     }
 
-    public function setZipCode(string $zip_code): self
+    public function setZipCode(string $zipCode): self
     {
-        $this->zip_code = $zip_code;
-
+        $this->zipCode = $zipCode;
         return $this;
     }
 
-    public function getCountry(): ?string
+    /**
+     * @return string
+     */
+    public function getCountry(): string
     {
         return $this->country;
     }
@@ -95,31 +120,34 @@ class Address
     public function setCountry(string $country): self
     {
         $this->country = $country;
-
         return $this;
     }
 
-    public function getUserId(): ?int
+    /**
+     * @return bool
+     */
+    public function isDefault(): bool
     {
-        return $this->user_id;
+        return $this->isDefault;
     }
 
-    public function setUserId(int $user_id): self
+    public function setIsDefault(bool $isDefault): self
     {
-        $this->user_id = $user_id;
-
+        $this->isDefault = $isDefault;
         return $this;
     }
 
-    public function getIsDefault(): ?bool
+    /**
+     * @return User
+     */
+    public function getUser(): User
     {
-        return $this->is_default;
+        return $this->user;
     }
 
-    public function setIsDefault(bool $is_default): self
+    public function setUser(User $user): self
     {
-        $this->is_default = $is_default;
-
+        $this->user = $user;
         return $this;
     }
 }

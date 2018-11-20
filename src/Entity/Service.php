@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Entity\Collection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ServiceRepository")
@@ -10,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Service
 {
     /**
+     * @var int
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -17,26 +20,51 @@ class Service
     private $id;
 
     /**
+     * @var string
      * @ORM\Column(type="string", length=255)
      */
     private $title;
 
     /**
+     * @var string
      * @ORM\Column(type="text", nullable=true)
      */
     private $description;
 
     /**
+     * @var float
      * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
      */
-    private $suggested_price;
+    private $suggestedPrice;
 
-    public function getId(): ?int
+    /**
+     * @var Collection|UsersServices[]
+     * @ORM\OneToMany(targetEntity="App\Entity\UsersServices", mappedBy="service")
+     */
+    private $usersServices;
+
+    public function __construct()
+    {
+        $this->usersServices = new ArrayCollection();
+    }
+    /**
+     * @return int
+     */
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -44,31 +72,49 @@ class Service
     public function setTitle(string $title): self
     {
         $this->title = $title;
-
         return $this;
     }
 
-    public function getDescription(): ?string
+    /**
+     * @return string
+     */
+    public function getDescription(): string
     {
         return $this->description;
     }
 
-    public function setDescription(?string $description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
-
         return $this;
     }
 
-    public function getSuggestedPrice()
+    /**
+     * @return float
+     */
+    public function getSuggestedPrice(): float
     {
-        return $this->suggested_price;
+        return $this->suggestedPrice;
     }
 
-    public function setSuggestedPrice($suggested_price): self
+    public function setSuggestedPrice(float $suggestedPrice): self
     {
-        $this->suggested_price = $suggested_price;
-
+        $this->suggestedPrice = $suggestedPrice;
         return $this;
     }
+
+    /**
+     * @return UsersServices[]|Collection
+     */
+    public function getUsersServices()
+    {
+        return $this->usersServices;
+    }
+
+    public function setUsersServices($usersServices): self
+    {
+        $this->usersServices = $usersServices;
+        return $this;
+    }
+
 }

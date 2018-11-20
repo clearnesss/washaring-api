@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Entity\Collection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -10,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class User
 {
     /**
+     * @var int
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -17,41 +20,84 @@ class User
     private $id;
 
     /**
+     * @var string
      * @ORM\Column(type="string", length=255)
      */
     private $email;
 
     /**
+     * @var string
      * @ORM\Column(type="string", length=12)
      */
     private $phone;
 
     /**
+     * @var string
      * @ORM\Column(type="string", length=255)
      */
     private $password;
 
     /**
+     * @var string
      * @ORM\Column(type="string", length=255)
      */
-    private $firstnaÃme;
+    private $firstName;
 
     /**
+     * @var string
      * @ORM\Column(type="string", length=255)
      */
-    private $lastname;
+    private $lastName;
 
     /**
+     * @var string
      * @ORM\Column(type="datetime")
      */
-    private $created_at;
+    private $createdAt;
 
-    public function getId(): ?int
+    /**
+     * @var Collection|Address[]
+     * @ORM\OneToMany(targetEntity="App\Entity\Address", mappedBy="address")
+     */
+    private $addresses;
+
+    /**
+     * @var Collection|Reservation[]
+     * @ORM\OneToMany(targetEntity="App\Entity\Reservation", mappedBy="reservation")
+     */
+    private $reservations;
+
+    /**
+     * @var Collection|UsersServices[]
+     * @ORM\OneToMany(targetEntity="App\Entity\UsersServices", mappedBy="user")
+     */
+    private $usersServices;
+
+    public function __construct()
+    {
+        $this->addresses = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
+        $this->usersServices = new ArrayCollection();
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getEmail(): ?string
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -59,11 +105,13 @@ class User
     public function setEmail(string $email): self
     {
         $this->email = $email;
-
         return $this;
     }
 
-    public function getPhone(): ?string
+    /**
+     * @return string
+     */
+    public function getPhone(): string
     {
         return $this->phone;
     }
@@ -71,11 +119,13 @@ class User
     public function setPhone(string $phone): self
     {
         $this->phone = $phone;
-
         return $this;
     }
 
-    public function getPassword(): ?string
+    /**
+     * @return string
+     */
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -83,43 +133,91 @@ class User
     public function setPassword(string $password): self
     {
         $this->password = $password;
-
         return $this;
     }
 
-    public function getFirstnaÃme(): ?string
+    /**
+     * @return string
+     */
+    public function getFirstName(): string
     {
-        return $this->firstnaÃme;
+        return $this->firstName;
     }
 
-    public function setFirstnaÃme(string $firstnaÃme): self
+    public function setFirstName(string $firstName): self
     {
-        $this->firstnaÃme = $firstnaÃme;
-
+        $this->firstName = $firstName;
         return $this;
     }
 
-    public function getLastname(): ?string
+    /**
+     * @return string
+     */
+    public function getLastName(): string
     {
-        return $this->lastname;
+        return $this->lastName;
     }
 
-    public function setLastname(string $lastname): self
+    public function setLastName(string $lastName): self
     {
-        $this->lastname = $lastname;
-
+        $this->lastName = $lastName;
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    /**
+     * @return string
+     */
+    public function getCreatedAt(): string
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $created_at): self
+    public function setCreatedAt(string $createdAt): self
     {
-        $this->created_at = $created_at;
-
+        $this->createdAt = $createdAt;
         return $this;
     }
+
+    /**
+     * @return Address[]|Collection
+     */
+    public function getAddresses()
+    {
+        return $this->addresses;
+    }
+
+    public function setAddresses($addresses): self
+    {
+        $this->addresses = $addresses;
+        return $this;
+    }
+
+    /**
+     * @return Reservation[]|Collection
+     */
+    public function getReservations()
+    {
+        return $this->reservations;
+    }
+
+    public function setReservations($reservations): self
+    {
+        $this->reservations = $reservations;
+        return $this;
+    }
+
+    /**
+     * @return UsersServices[]|Collection
+     */
+    public function getUsersServices()
+    {
+        return $this->usersServices;
+    }
+
+    public function setUsersServices($usersServices): self
+    {
+        $this->usersServices = $usersServices;
+        return $this;
+    }
+
 }
