@@ -15,15 +15,15 @@ class UserType extends AbstractType
         $builder
             ->add('email')
             ->add('phone')
-            ->add('firstName')
-            ->add('lastName')
-            ->add('password');
+            ->add('password')
+            ->add('first_name')
+            ->add('last_name');
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(array(
-            'data_class' => 'App\Entity\User::class'
+            'data_class' => 'App\Entity\User'
         ));
     }
 }

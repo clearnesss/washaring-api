@@ -43,7 +43,7 @@ class User
      * @var string
      * @ORM\Column(type="string", length=12)
      * @Assert\NotBlank
-     * @Assert\Regex(pattern="/^\+33\(0\)[0-9]*$", message="number_only")
+     * @Assert\Regex(pattern="/^\+33\(0\)[0-9]*$/", message="number_only")
      * @Serializer\Expose
      */
     private $phone;
@@ -102,8 +102,6 @@ class User
 
     public function __construct()
     {
-        $this->createdAt = new \DateTime();
-
         $this->addresses = new ArrayCollection();
         $this->reservations = new ArrayCollection();
         $this->usersServices = new ArrayCollection();
@@ -134,7 +132,7 @@ class User
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -148,7 +146,7 @@ class User
     /**
      * @return string
      */
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -162,7 +160,7 @@ class User
     /**
      * @return string
      */
-    public function getPhone(): string
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
@@ -176,7 +174,7 @@ class User
     /**
      * @return string
      */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
@@ -190,7 +188,7 @@ class User
     /**
      * @return string
      */
-    public function getFirstName(): string
+    public function getFirstName(): ?string
     {
         return $this->firstName;
     }
@@ -204,7 +202,7 @@ class User
     /**
      * @return string
      */
-    public function getLastName(): string
+    public function getLastName(): ?string
     {
         return $this->lastName;
     }
@@ -218,7 +216,7 @@ class User
     /**
      * @return string
      */
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
@@ -232,7 +230,7 @@ class User
     /**
      * @return Address[]|Collection
      */
-    public function getAddresses()
+    public function getAddresses() : Collection
     {
         return $this->addresses;
     }
@@ -246,7 +244,7 @@ class User
     /**
      * @return Reservation[]|Collection
      */
-    public function getReservations()
+    public function getReservations() : Collection
     {
         return $this->reservations;
     }
@@ -260,7 +258,7 @@ class User
     /**
      * @return UsersServices[]|Collection
      */
-    public function getUsersServices()
+    public function getUsersServices() : Collection
     {
         return $this->usersServices;
     }
