@@ -1,10 +1,10 @@
-# Washaring API
+# Washaring API
 
 This API is used to get data from **Washaring Portal**.
 
 This project is a **sandbox** to learn Symfony framework :)
 
-## How to ?
+## How to ?
 
 Clone the projet
 ```
