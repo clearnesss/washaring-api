@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -8,9 +10,11 @@ use Entity\Collection;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @Serializer\ExclusionPolicy("ALL")
  */
 class User
 {
@@ -19,6 +23,7 @@ class User
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Serializer\Expose
      */
     private $id;
 
@@ -30,6 +35,7 @@ class User
      *     message = "The email '{{ value }}' is not a valid email.",
      *     checkMX = true
      * )
+     * @Serializer\Expose
      */
     private $email;
 
@@ -38,6 +44,7 @@ class User
      * @ORM\Column(type="string", length=12)
      * @Assert\NotBlank
      * @Assert\Regex(pattern="/^\+33\(0\)[0-9]*$", message="number_only")
+     * @Serializer\Expose
      */
     private $phone;
 
@@ -52,6 +59,7 @@ class User
      * @var string
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
+     * @Serializer\Expose
      */
     private $firstName;
 
@@ -59,6 +67,7 @@ class User
      * @var string
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
+     * @Serializer\Expose
      */
     private $lastName;
 
@@ -66,24 +75,28 @@ class User
      * @var \DateTime
      * @ORM\Column(type="datetime")
      * @Assert\NotBlank
+     * @Serializer\Expose
      */
     private $createdAt;
 
     /**
      * @var Collection|Address[]
      * @ORM\OneToMany(targetEntity="App\Entity\Address", mappedBy="user")
+     * @Serializer\Expose
      */
     private $addresses;
 
     /**
      * @var Collection|Reservation[]
      * @ORM\OneToMany(targetEntity="App\Entity\Reservation", mappedBy="customer")
+     * @Serializer\Expose
      */
     private $reservations;
 
     /**
      * @var Collection|UsersServices[]
      * @ORM\OneToMany(targetEntity="App\Entity\UsersServices", mappedBy="user")
+     * @Serializer\Expose
      */
     private $usersServices;
 
