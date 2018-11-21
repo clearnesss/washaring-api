@@ -5,6 +5,9 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Entity\Collection;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -23,6 +26,10 @@ class User
      * @var string
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
+     * @Assert\Email(
+     *     message = "The email '{{ value }}' is not a valid email.",
+     *     checkMX = true
+     * )
      */
     private $email;
 
@@ -30,6 +37,7 @@ class User
      * @var string
      * @ORM\Column(type="string", length=12)
      * @Assert\NotBlank
+     * @Assert\Regex(pattern="/^\+33\(0\)[0-9]*$", message="number_only")
      */
     private $phone;
 
@@ -63,13 +71,13 @@ class User
 
     /**
      * @var Collection|Address[]
-     * @ORM\OneToMany(targetEntity="App\Entity\Address", mappedBy="address")
+     * @ORM\OneToMany(targetEntity="App\Entity\Address", mappedBy="user")
      */
     private $addresses;
 
     /**
      * @var Collection|Reservation[]
-     * @ORM\OneToMany(targetEntity="App\Entity\Reservation", mappedBy="reservation")
+     * @ORM\OneToMany(targetEntity="App\Entity\Reservation", mappedBy="customer")
      */
     private $reservations;
 
@@ -82,9 +90,32 @@ class User
     public function __construct()
     {
         $this->createdAt = new \DateTime();
+
         $this->addresses = new ArrayCollection();
         $this->reservations = new ArrayCollection();
         $this->usersServices = new ArrayCollection();
+    }
+
+    public function user(ValidatorInterface $validator): Response
+    {
+        $user = new User();
+
+        // ... do something to the $user object
+
+        $errors = $validator->validate($user);
+
+        if (count($errors) > 0) {
+            /*
+             * Uses a __toString method on the $errors variable which is a
+             * ConstraintViolationList object. This gives us a nice string
+             * for debugging.
+             */
+            $errorsString = (string)$errors;
+
+            return new Response($errorsString);
+        }
+
+        return new Response('The user is valid');
     }
 
     /**

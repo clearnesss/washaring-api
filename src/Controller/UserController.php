@@ -26,21 +26,17 @@ class UserController
         $data = $request->getContent();
         $user = $this->serializer->deserialize($data, 'App\Entity\User::class', 'json');
 
+        $user->setCreatedAt(new \DateTime());
+
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
         return new Response('', Response::HTTP_CREATED);
     }
 
-    public function read(): Response
+    public function read(int $id): Response
     {
-        $user = new User();
-        $user
-            ->setFirstName('Julien')
-            ->setLastName('LECARPENTIER')
-            ->setEmail('lecarpentier.julien@gmail.com')
-            ->setPhone('++33123456789')
-            ->setPassword('password');
+        $user = $this->entityManager->getRepository('App:User')->find($id);
 
         $data = $this->serializer->serialize($user, 'json');
 
@@ -56,6 +52,11 @@ class UserController
     }
 
     public function delete(): Response
+    {
+        return new Response('Method not implemented yet');
+    }
+
+    public function list(): Response
     {
         return new Response('Method not implemented yet');
     }
