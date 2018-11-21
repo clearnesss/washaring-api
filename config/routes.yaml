@@ -1,3 +1,21 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+# CRUD user
+
+api_user_create:
+    path: /users
+    controller: App\Controller\UserController::create
+    methods: [POST]
+
+api_user_read:
+    path: /users/{id}
+    controller: App\Controller\UserController::read
+    methods: [GET]
+
+api_user_update:
+    path: /users/{id}
+    controller: App\Controller\UserController::update
+    methods: [PUT]
+
+api_user_delete:
+    path: /users/{id}
+    controller: App\Controller\UserController::delete
+    methods: [DELETE]

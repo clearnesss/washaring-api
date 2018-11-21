@@ -22,36 +22,42 @@ class User
     /**
      * @var string
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $email;
 
     /**
      * @var string
      * @ORM\Column(type="string", length=12)
+     * @Assert\NotBlank
      */
     private $phone;
 
     /**
      * @var string
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $password;
 
     /**
      * @var string
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $firstName;
 
     /**
      * @var string
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $lastName;
 
     /**
-     * @var string
+     * @var \DateTime
      * @ORM\Column(type="datetime")
+     * @Assert\NotBlank
      */
     private $createdAt;
 
@@ -75,6 +81,7 @@ class User
 
     public function __construct()
     {
+        $this->createdAt = new \DateTime();
         $this->addresses = new ArrayCollection();
         $this->reservations = new ArrayCollection();
         $this->usersServices = new ArrayCollection();
@@ -167,12 +174,12 @@ class User
     /**
      * @return string
      */
-    public function getCreatedAt(): string
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(string $createdAt): self
+    public function setCreatedAt(\DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
         return $this;
