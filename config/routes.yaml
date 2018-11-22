@@ -1,10 +1,5 @@
 # CRUD user
 
-api_user_create:
-    path: /users
-    controller: App\Controller\UserController::create
-    methods: [POST]
-
 api_user_list:
     path: /users
     controller: App\Controller\UserController::list
@@ -19,6 +14,16 @@ api_user_update:
     path: /users/{id}
     controller: App\Controller\UserController::update
     methods: [PUT]
+
+api_user_create:
+    path: /users
+    controller: App\Controller\UserController::create
+    methods: [POST]
+
+api_user_delete_all:
+    path: /users
+    controller: App\Controller\UserController::deleteAll
+    methods: [DELETE]
 
 api_user_delete:
     path: /users/{id}

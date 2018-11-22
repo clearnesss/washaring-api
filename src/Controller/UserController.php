@@ -75,7 +75,7 @@ class UserController
         $data = $this->serializer->deserialize($rawData, 'array', 'json');
 
         $form = $this->formFactory->create(UserType::class, $user);
-        $form->submit($data);
+        $form->submit($data, false);
 
         $this->entityManager->merge($user);
         $this->entityManager->flush();
@@ -108,5 +108,14 @@ class UserController
         $response->headers->set('Content-Type', 'application/json');
 
         return $response;
+    }
+
+    public function deleteAll(): Response
+    {
+        $qb = $this->entityManager->createQueryBuilder();
+        $query = $qb->delete()->from('App:User', 'u')->getQuery();
+        $query->getResult(); // Return affected rows
+
+        return new Response(Response::HTTP_NO_CONTENT);
     }
 }
