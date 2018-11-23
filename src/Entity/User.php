@@ -10,11 +10,9 @@ use Entity\Collection;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @Serializer\ExclusionPolicy("ALL")
  */
 class User
 {
@@ -23,85 +21,89 @@ class User
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Serializer\Expose
      */
     private $id;
 
     /**
      * @var string
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank
+     * @Assert\NotBlank(
+     *     message = "The email should not be blank.",
+     * )
      * @Assert\Email(
      *     message = "The email '{{ value }}' is not a valid email.",
      *     checkMX = true
      * )
-     * @Serializer\Expose
      */
     private $email;
 
     /**
      * @var string
      * @ORM\Column(type="string", length=12)
-     * @Assert\NotBlank
+     * @Assert\NotBlank(
+     *     message = "The phone should not be blank.",
+     * )
      * @Assert\Regex(pattern="/^\+33\(0\)[0-9]*$/", message="number_only")
-     * @Serializer\Expose
      */
     private $phone;
 
     /**
      * @var string
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank
+     * @Assert\NotBlank(
+     *     message = "The password should not be blank.",
+     * )
      */
     private $password;
 
     /**
      * @var string
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank
-     * @Serializer\Expose
+     * @Assert\NotBlank(
+     *     message = "The first name should not be blank.",
+     * )
      */
     private $firstName;
 
     /**
      * @var string
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank
-     * @Serializer\Expose
+     * @Assert\NotBlank(
+     *     message = "The last name should not be blank.",
+     * )
      */
     private $lastName;
 
     /**
      * @var \DateTime
      * @ORM\Column(type="datetime")
-     * @Assert\NotBlank
-     * @Serializer\Expose
+     * @Assert\NotBlank(
+     *     message = "The creation date should not be blank.",
+     * )
      */
     private $createdAt;
 
     /**
      * @var Collection|Address[]
      * @ORM\OneToMany(targetEntity="App\Entity\Address", mappedBy="user")
-     * @Serializer\Expose
      */
     private $addresses;
 
     /**
      * @var Collection|Reservation[]
      * @ORM\OneToMany(targetEntity="App\Entity\Reservation", mappedBy="customer")
-     * @Serializer\Expose
      */
     private $reservations;
 
     /**
      * @var Collection|UsersServices[]
      * @ORM\OneToMany(targetEntity="App\Entity\UsersServices", mappedBy="user")
-     * @Serializer\Expose
      */
     private $usersServices;
 
     public function __construct()
     {
+        $this->createdAt = new \DateTime();
         $this->addresses = new ArrayCollection();
         $this->reservations = new ArrayCollection();
         $this->usersServices = new ArrayCollection();
@@ -151,7 +153,7 @@ class User
         return $this->email;
     }
 
-    public function setEmail(string $email): self
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
         return $this;
@@ -165,7 +167,7 @@ class User
         return $this->phone;
     }
 
-    public function setPhone(string $phone): self
+    public function setPhone(?string $phone): self
     {
         $this->phone = $phone;
         return $this;
@@ -179,7 +181,7 @@ class User
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(?string $password): self
     {
         $this->password = $password;
         return $this;
@@ -193,7 +195,7 @@ class User
         return $this->firstName;
     }
 
-    public function setFirstName(string $firstName): self
+    public function setFirstName(?string $firstName): self
     {
         $this->firstName = $firstName;
         return $this;
@@ -207,7 +209,7 @@ class User
         return $this->lastName;
     }
 
-    public function setLastName(string $lastName): self
+    public function setLastName(?string $lastName): self
     {
         $this->lastName = $lastName;
         return $this;
@@ -230,7 +232,7 @@ class User
     /**
      * @return Address[]|Collection
      */
-    public function getAddresses() : Collection
+    public function getAddresses()
     {
         return $this->addresses;
     }
@@ -244,7 +246,7 @@ class User
     /**
      * @return Reservation[]|Collection
      */
-    public function getReservations() : Collection
+    public function getReservations()
     {
         return $this->reservations;
     }
@@ -258,7 +260,7 @@ class User
     /**
      * @return UsersServices[]|Collection
      */
-    public function getUsersServices() : Collection
+    public function getUsersServices()
     {
         return $this->usersServices;
     }
@@ -268,5 +270,4 @@ class User
         $this->usersServices = $usersServices;
         return $this;
     }
-
 }

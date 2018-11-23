@@ -1,0 +1,9 @@
+openapi: 3.0.0
+info:
+  title: Washare API
+  description: API used to manage logical data driven by domain
+  version: 0.0.1
+
+servers:
+- url: "No existing yet"
+  description: "Development environment :  http://127.0.0.1:8000"

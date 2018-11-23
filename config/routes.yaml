@@ -1,32 +1,31 @@
 # CRUD user
 
 api_user_list:
-    path: /users
+    path: /api/users
     controller: App\Controller\UserController::list
     methods: [GET]
 
 api_user_read:
-    path: /users/{id}
+    path: /api/users/{id}
     controller: App\Controller\UserController::read
     methods: [GET]
 
 api_user_update:
-    path: /users/{id}
+    path: /api/users/{id}
     controller: App\Controller\UserController::update
     methods: [PUT]
 
 api_user_create:
-    path: /users
+    path: /api/users
     controller: App\Controller\UserController::create
     methods: [POST]
 
-api_user_delete_all:
-    path: /users
-    controller: App\Controller\UserController::deleteAll
-    methods: [DELETE]
-
 api_user_delete:
-    path: /users/{id}
+    path: /api/users/{id}
     controller: App\Controller\UserController::delete
     methods: [DELETE]
 
+api_user_delete_all:
+    path: /api/users
+    controller: App\Controller\UserController::deleteAll
+    methods: [DELETE]
