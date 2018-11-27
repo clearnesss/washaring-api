@@ -8,7 +8,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20181121081527 extends AbstractMigration
+final class Version20181126155444 extends AbstractMigration
 {
     public function up(Schema $schema) : void
     {
@@ -23,7 +23,8 @@ final class Version20181121081527 extends AbstractMigration
         $this->addSql('CREATE TABLE address (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, user_id INTEGER DEFAULT NULL, street CLOB NOT NULL, city VARCHAR(255) NOT NULL, zip_code VARCHAR(5) NOT NULL, country VARCHAR(50) NOT NULL, is_default BOOLEAN NOT NULL)');
         $this->addSql('CREATE INDEX IDX_D4E6F81A76ED395 ON address (user_id)');
         $this->addSql('CREATE TABLE service (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, title VARCHAR(255) NOT NULL, description CLOB DEFAULT NULL, suggested_price NUMERIC(10, 2) DEFAULT NULL)');
-        $this->addSql('CREATE TABLE user (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, email VARCHAR(255) NOT NULL, phone VARCHAR(12) NOT NULL, password VARCHAR(255) NOT NULL, first_name VARCHAR(255) NOT NULL, last_name VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL)');
+        $this->addSql('CREATE TABLE user (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, email VARCHAR(255) NOT NULL, phone VARCHAR(12) NOT NULL, password VARCHAR(255) NOT NULL, first_name VARCHAR(255) NOT NULL, last_name VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, roles CLOB DEFAULT NULL --(DC2Type:json)
+        )');
         $this->addSql('CREATE TABLE users_services (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, user_id INTEGER DEFAULT NULL, service_id INTEGER DEFAULT NULL, price NUMERIC(10, 2) NOT NULL, further_information CLOB DEFAULT NULL)');
         $this->addSql('CREATE INDEX IDX_873CAB3A76ED395 ON users_services (user_id)');
         $this->addSql('CREATE INDEX IDX_873CAB3ED5CA9E6 ON users_services (service_id)');

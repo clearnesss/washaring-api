@@ -77,6 +77,9 @@
     "doctrine/reflection": {
         "version": "v1.0.0"
     },
+    "emarref/jwt": {
+        "version": "1.0.3"
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
@@ -235,6 +238,18 @@
             "version": "4.0",
             "ref": "5f514d9d3b8a8aac3d62ae6a86b18b90ed0c7826"
         }
+    },
+    "symfony/security-bundle": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "f8a63faa0d9521526499c0a8f403c9964ecb0527"
+        }
+    },
+    "symfony/security-http": {
+        "version": "v4.1.7"
     },
     "symfony/serializer": {
         "version": "v4.1.7"

@@ -1,5 +1,4 @@
 # CRUD user
-
 api_user_list:
     path: /api/users
     controller: App\Controller\UserController::list
@@ -29,3 +28,13 @@ api_user_delete_all:
     path: /api/users
     controller: App\Controller\UserController::deleteAll
     methods: [DELETE]
+
+login:
+    path: /api/login
+    controller: App\Controller\SecurityController::login
+    methods: [POST]
+
+#user_profile_read:
+#    path: /profile
+#    controller: App\Controller\UserController::deleteAll
+#    methods: [GET]

@@ -7,29 +7,28 @@ namespace App\Controller;
 use App\DTO\User\CreateUserRequestDTO;
 use App\DTO\User\UpdateUserRequestDTO;
 use App\Entity\User;
-use App\Form\UserType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 class UserController extends AbstractController
 {
     private $entityManager;
 
-    private $formFactory;
+    private $passwordEncoder;
 
-    public function __construct(EntityManagerInterface $entityManager, FormFactoryInterface $formFactory)
+    public function __construct(EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->entityManager = $entityManager;
-        $this->formFactory = $formFactory;
+        $this->passwordEncoder = $passwordEncoder;
     }
 
     public function create(Request $request): Response
     {
-
         $createUserRequestDTO = new CreateUserRequestDTO();
         $this->get('serializer')->deserialize($request->getContent(), CreateUserRequestDTO::class, 'json', [
             AbstractNormalizer::OBJECT_TO_POPULATE => $createUserRequestDTO,
@@ -38,15 +37,20 @@ class UserController extends AbstractController
 
         $user = $createUserRequestDTO->transform();
 
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
+        $user->setPassword($this->passwordEncoder->encodePassword(
+            $user,
+            $user->getPassword()
+        ));
+
+        $this->getDoctrine()->getManager()->persist($user);
+        $this->getDoctrine()->getManager()->flush();
 
         return new Response('', Response::HTTP_CREATED);
     }
 
     public function read(int $id): Response
     {
-        $user = $this->entityManager->getRepository(User::class)->find($id);
+        $user = $this->getDoctrine()->getManager()->getRepository(User::class)->find($id);
         if (!$user) {
             return new Response('', Response::HTTP_NOT_FOUND);
         }
@@ -60,7 +64,7 @@ class UserController extends AbstractController
 
     public function update(Request $request, int $id): Response
     {
-        $user = $this->entityManager->getRepository(User::class)->find($id);
+        $user = $this->getDoctrine()->getManager()->getRepository(User::class)->find($id);
         if (empty($user)) {
             return new Response('', Response::HTTP_NOT_FOUND);
         }
@@ -70,32 +74,36 @@ class UserController extends AbstractController
             AbstractNormalizer::OBJECT_TO_POPULATE => $updateUserRequestDTO,
             AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false
         ]);
-        $updateUserRequestDTO->hydrate($user);
 
-        $this->entityManager->flush();
+        if (null !== $updateUserRequestDTO->getPassword()) {
+            $user->setPassword($this->passwordEncoder->encodePassword(
+                $user,
+                $user->getPassword()
+            ));
+        }
+        $updateUserRequestDTO->hydrate($user);
+        $this->getDoctrine()->getManager()->flush();
 
         return new Response('', Response::HTTP_NO_CONTENT);
     }
 
     public function delete(int $id): Response
     {
-
-        $user = $this->entityManager->getRepository(User::class)->find($id);
+        $user = $this->getDoctrine()->getManager()->getRepository(User::class)->find($id);
 
         if (!$user) {
             return new Response('', Response::HTTP_NOT_FOUND);
         }
 
-        $this->entityManager->remove($user);
-        $this->entityManager->flush();
+        $this->getDoctrine()->getManager()->remove($user);
+        $this->getDoctrine()->getManager()->flush();
 
         return new Response('', Response::HTTP_NO_CONTENT);
     }
 
     public function list(): Response
     {
-
-        $users = $this->entityManager->getRepository(User::class)->findAll();
+        $users = $this->getDoctrine()->getManager()->getRepository(User::class)->findAll();
         $data = $this->get('serializer')->serialize($users, 'json');
 
         $response = new Response($data);

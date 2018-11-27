@@ -8,13 +8,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Entity\Collection;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
-class User
+class User implements UserInterface
 {
     /**
      * @var int
@@ -84,22 +85,28 @@ class User
     private $createdAt;
 
     /**
-     * @var Collection|Address[]
+     * @var ArrayCollection|Address[]
      * @ORM\OneToMany(targetEntity="App\Entity\Address", mappedBy="user")
      */
     private $addresses;
 
     /**
-     * @var Collection|Reservation[]
+     * @var ArrayCollection|Reservation[]
      * @ORM\OneToMany(targetEntity="App\Entity\Reservation", mappedBy="customer")
      */
     private $reservations;
 
     /**
-     * @var Collection|UsersServices[]
+     * @var ArrayCollection|UsersServices[]
      * @ORM\OneToMany(targetEntity="App\Entity\UsersServices", mappedBy="user")
      */
     private $usersServices;
+
+    /**
+     * @var array
+     * @ORM\Column(type="json", nullable=true)
+     */
+    private $roles = [];
 
     public function __construct()
     {
@@ -131,14 +138,53 @@ class User
         return new Response('The user is valid');
     }
 
+
+    public function getUsername(): string
+    {
+        return $this->email;
+    }
+
+    public function getSalt(): ?string
+    {
+        return null;
+    }
+
+    public function eraseCredentials(): void
+    {
+        $this->password = null;
+    }
+
     /**
-     * @return int
+     * @return array
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER';
+        return array_unique($roles);
+    }
+
+    /**
+     * @param array
+     * @return User
+     */
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+        return $this;
+    }
+
+    /**
+     * @return int|null
      */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return User
+     */
     public function setId(int $id): self
     {
         $this->id = $id;
@@ -146,13 +192,17 @@ class User
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
+    /**
+     * @var string
+     * @return User
+     */
     public function setEmail(?string $email): self
     {
         $this->email = $email;
@@ -160,13 +210,17 @@ class User
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPhone(): ?string
     {
         return $this->phone;
     }
 
+    /**
+     * @var string
+     * @return User
+     */
     public function setPhone(?string $phone): self
     {
         $this->phone = $phone;
@@ -174,13 +228,17 @@ class User
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPassword(): ?string
     {
         return $this->password;
     }
 
+    /**
+     * @var string
+     * @return User
+     */
     public function setPassword(?string $password): self
     {
         $this->password = $password;
@@ -188,13 +246,17 @@ class User
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getFirstName(): ?string
     {
         return $this->firstName;
     }
 
+    /**
+     * @var string
+     * @return User
+     */
     public function setFirstName(?string $firstName): self
     {
         $this->firstName = $firstName;
@@ -202,13 +264,16 @@ class User
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getLastName(): ?string
     {
         return $this->lastName;
     }
 
+    /**
+     * @return User
+     */
     public function setLastName(?string $lastName): self
     {
         $this->lastName = $lastName;
@@ -216,13 +281,17 @@ class User
     }
 
     /**
-     * @return string
+     * @return \DateTime|null
      */
     public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
 
+    /**
+     * @var \DateTime
+     * @return User
+     */
     public function setCreatedAt(\DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
@@ -230,13 +299,17 @@ class User
     }
 
     /**
-     * @return Address[]|Collection
+     * @return Address[]|ArrayCollection|null
      */
     public function getAddresses()
     {
         return $this->addresses;
     }
 
+    /**
+     * @var ArrayCollection
+     * @return User
+     */
     public function setAddresses($addresses): self
     {
         $this->addresses = $addresses;
@@ -244,13 +317,17 @@ class User
     }
 
     /**
-     * @return Reservation[]|Collection
+     * @return Reservation[]|ArrayCollection|null
      */
     public function getReservations()
     {
         return $this->reservations;
     }
 
+    /**
+     * @var ArrayCollection
+     * @return User
+     */
     public function setReservations($reservations): self
     {
         $this->reservations = $reservations;
@@ -258,13 +335,17 @@ class User
     }
 
     /**
-     * @return UsersServices[]|Collection
+     * @return UsersServices[]|ArrayCollection|null
      */
     public function getUsersServices()
     {
         return $this->usersServices;
     }
 
+    /**
+     * @var ArrayCollection
+     * @return User
+     */
     public function setUsersServices($usersServices): self
     {
         $this->usersServices = $usersServices;
